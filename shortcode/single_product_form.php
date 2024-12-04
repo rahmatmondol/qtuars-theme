@@ -7,6 +7,7 @@ function custom_shortcode_function()
     $productId = get_the_ID();
     $product = wc_get_product($productId);
     $meeting_points = get_field('meeting_points', $productId);
+    $type = get_field('product_type', $productId);
     ob_start();
     ?>
     <div class="checkout-form">
@@ -15,7 +16,7 @@ function custom_shortcode_function()
                 <input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
             </div>
             <div class="form-group mt-3">
-                <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Company Name (if applicable)" required>
+                <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Company Name (if applicable)">
             </div>
             <div class="form-group mt-3">
                 <input type="tel" class="form-control" id="phone_number" name="phone_number" placeholder="Phone Number*" required>
@@ -34,7 +35,7 @@ function custom_shortcode_function()
             </div>
             <div class="form-group mt-3">
                 <label for="time">Select meeting point</label>
-                <select class="form-select mt-2" aria-label="Default select example">
+                <select class="form-select mt-2" name="meeting_point" aria-label="Default select example">
                     <option selected disabled>Select meeting point</option>
                     <?php
                         if ($meeting_points) {
@@ -45,46 +46,80 @@ function custom_shortcode_function()
                     ?>
                 </select>
             </div>
-
-            <div class="form-group age-group mt-3 mb-5">
-                <label for="age">Age</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <button type="button" id="minus" onclick="decreaseAge()">-</button>
-                    </div>
-                    <input type="text" class="form-control" id="age" name="age" placeholder="Age" value="0" required>
-                    <div class="input-group-append">
-                        <button type="button" id="plus" onclick="increaseAge()">+</button>
+            <?php if ($type) : ?>
+                <div class="form-group age-group mt-3 mb-5">
+                    <label for="age">Age</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <button type="button" id="minus" onclick="decreaseAge()">-</button>
+                        </div>
+                        <input type="text" class="form-control" id="age" name="age" placeholder="Age" value="0" readonly>
+                        <div class="input-group-append">
+                            <button type="button" id="plus" onclick="increaseAge()">+</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <hr/>
-            <h3 class="document-title">Upload verification Documents</h3>
-            <div class="row">
-                <div class="col-4">
-                    <div class="form-group mt-3">
-                        <label for="driver_license" class="form-label">Diver's License <span class="text-danger">*certified divers only</span></label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <label class="custom-file-label" for="diver_license">Choose file</label>
-                                <input type="file" class="custom-file-input" id="diver_license" name="diver_license" accept=".pdf,.jpg,.jpeg,.png" required>
+            
+                <hr/>
+                <h3 class="document-title">Upload verification Documents</h3>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group mt-3">
+                            <label for="driver_license" class="form-label">Diver's License <span class="text-danger">*certified divers only</span></label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <label class="custom-file-label" for="diver_license">Choose file</label>
+                                    <input type="file" class="custom-file-input" id="diver_license" name="diver_license" accept=".pdf,.jpg,.jpeg,.png" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group mt-3">
+                            <label for="driver_license" class="form-label">Driver's Passport <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <label class="custom-file-label" for="driver_passport">Choose file</label>
+                                    <input type="file" class="custom-file-input" id="driver_passport" name="driver_passport" accept=".pdf,.jpg,.jpeg,.png" required>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-4">
-                    <div class="form-group mt-3">
-                        <label for="driver_license" class="form-label">Driver's Passport <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <label class="custom-file-label" for="driver_passport">Choose file</label>
-                                <input type="file" class="custom-file-input" id="driver_passport" name="driver_passport" accept=".pdf,.jpg,.jpeg,.png" required>
+            <?php else: ?>
+                <div class="row mt-5">
+                <h4 class="age-title">No. of Guests</h4>
+                    <div class="col-3">
+                        <div class="form-group age-group mt-3 mb-5">
+                            <label for="age">Child age 3-11</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button type="button" id="minus" onclick="decreaseChildAge()">-</button>
+                                </div>
+                                <input type="text" class="form-control" id="child_age" name="child_age" value="3" readonly>
+                                <div class="input-group-append">
+                                    <button type="button" id="plus" onclick="increaseChildAge()">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group age-group mt-3 mb-5">
+                            <label for="age">Adult age 12+</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button type="button" id="minus" onclick="decreaseAdultAge()">-</button>
+                                </div>
+                                <input type="text" class="form-control" id="adult_age" name="adult_age" value="12" readonly>
+                                <div class="input-group-append">
+                                    <button type="button" id="plus" onclick="increaseAdultAge()">+</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            <?php endif; ?>
+
             <div class="form-group mt-3">
                 <button type="submit" class="add-to-cart">Add to Cart</button>
                 <span class="price">
@@ -96,106 +131,167 @@ function custom_shortcode_function()
 
         </form>
     </div>
-    
-  
+
     <script>
-            function increaseAge() {
-                var age = document.getElementById('age').value;
-                document.getElementById('age').value = parseInt(age) + 1;
-            }
+        //jQuery ready start
+        jQuery(document).ready(function ($) {
+            //add to cart
+            $("#checkout_form").on('submit', function (e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+                formData.append('action', 'qtuars_add_to_cart');
 
-            function decreaseAge() {
-                var age = document.getElementById('age').value;
-                if (age > 0) {
-                    document.getElementById('age').value = parseInt(age) - 1;
-                }
-            }
-        </script>
+                $.ajax({
+                    url: '<?php echo admin_url('admin-ajax.php'); ?>',
+                    type: 'post',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        console.log(response);
+                        location.reload();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(thrownError);
+                        alert('Something went wrong');
+                    }
+                });
+            });
+        });
 
-        <style>
-            
-            .form-select,.form-control {
-                background: #f4f3f3;
-                padding: 12px !important;
-                border-color: #cacaca !important;
-                border-radius: 0px !important;
-            }
+        function increaseAge() {
+            var age = document.getElementById('age').value;
+            document.getElementById('age').value = parseInt(age) + 1;
+        }
 
-          
-            .form-group.age-group {
-                display: flex;
-                align-items: center;
-                gap: 11px;
+        function decreaseAge() {
+            var age = document.getElementById('age').value;
+            if (age > 0) {
+                document.getElementById('age').value = parseInt(age) - 1;
             }
+        }
 
-            .form-group.age-group .form-control {
-                background: transparent;
-                border: none;
-                width: 35px !important;
-                flex: inherit;
-                font-size: 26px;
-                padding: 0px 10px !important;
+        function increaseChildAge() {
+            var age = document.getElementById('child_age').value;
+            if (age < 11) {
+                document.getElementById('child_age').value = parseInt(age) + 1;
+
             }
+        }
+        function decreaseChildAge() {
+            var age = document.getElementById('child_age').value;
+            if (age > 3) {
+                document.getElementById('child_age').value = parseInt(age) - 1;
+            }
+        }
+
+        function increaseAdultAge() {
+            var age = document.getElementById('adult_age').value;
+            if (age < 80) {
+                document.getElementById('adult_age').value = parseInt(age) + 1;
+            }
+        }
+        function decreaseAdultAge() {
+            var age = document.getElementById('adult_age').value;
+            if (age > 12) {
+                document.getElementById('adult_age').value = parseInt(age) - 1;
+            }
+        }
+    </script>
+
+    <style>
+        
+        .form-select,.form-control {
+            background: #f4f3f3;
+            padding: 12px !important;
+            border-color: #cacaca !important;
+            border-radius: 0px !important;
+        }
+
+        
+        .form-group.age-group {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .form-group.age-group .form-control {
+            background: transparent;
+            border: none;
+                border-top-color: currentcolor;
+                border-right-color: currentcolor;
+                border-bottom-color: currentcolor;
+                border-left-color: currentcolor;
+            min-width: 50px !important;
+            flex: inherit;
+            font-size: 26px;
+            padding: 0px 10px !important;
+            text-align: center;
+        }
 
 
-            .input-group-append button, .input-group-prepend button {
-                border-color: #949494;
-                border-radius: 30px;
-                font-size: 25px;
-                color: #000;
-                height: 40px;
-                display: flex;
-                align-items: end;
-                width: 42px;
-                justify-content: center;
-                padding: 4px;
-            }
+        .input-group-append button, .input-group-prepend button {
+            border-color: #949494;
+            border-radius: 30px;
+            font-size: 25px;
+            color: #000;
+            height: 40px;
+            display: flex;
+            align-items: end;
+            width: 42px;
+            justify-content: center;
+            padding: 4px;
+        }
 
-            .input-group-append button:hover, .input-group-prepend button:hover {
-                background: #2e464a;
-                color: #fff;
-            }
+        .input-group-append button:hover, .input-group-prepend button:hover {
+            background: #2e464a;
+            color: #fff;
+        }
 
-            .document-title {
-                font-family: "Lato", Sans-serif;
-                font-size: 30px;
-                font-weight: 700;
-                color: #2e464a;
-                margin-top: 20px;
-            }
+        .document-title {
+            font-family: "Lato", Sans-serif;
+            font-size: 30px;
+            font-weight: 700;
+            color: #2e464a;
+            margin-top: 20px;
+        }
 
-            .custom-file-label {
-                background: #404040;
-                color: #c8c8c8;
-                padding: 12px 30px;
-                border-radius: 10px;
-                cursor: pointer;
-            }
-            .custom-file-input {
-                margin-left: 61px;
-                position: relative;
-                z-index: -1;
-                top: -34px;
-            }
+        .custom-file-label {
+            background: #404040;
+            color: #c8c8c8;
+            padding: 12px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .custom-file-input {
+            margin-left: 61px;
+            position: relative;
+            z-index: -1;
+            top: -34px;
+        }
 
-            
-            .price {
-                font-size: 21px !important;
-                color: #2e464a !important;
-            }
-            .add-to-cart {
-                background: #2e464a;
-                color: #fff;
-                border: none;
-                text-transform: uppercase;
-                margin: 10px 15px 30px 0px;
-                padding: 10px 34px;
-            }
+        
+        .price {
+            font-size: 21px !important;
+            color: #2e464a !important;
+        }
+        .add-to-cart {
+            background: #2e464a;
+            color: #fff;
+            border: none;
+            text-transform: uppercase;
+            margin: 10px 15px 30px 0px;
+            padding: 10px 34px;
+        }
 
-            .add-to-cart:hover {
-                background: #404040;
-            }
-        </style>
+        .add-to-cart:hover {
+            background: #404040;
+        }
+        .form-group.age-group label {
+            min-width: fit-content;
+        }
+    </style>
     <?php
     return ob_get_clean();
 }
