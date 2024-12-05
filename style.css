@@ -7,31 +7,101 @@ Template: hello-elementor
 Version: 1.0
 */
 
-.image-vox {
-  border-radius: 30px 30px 30px 30px;
-  box-shadow: -5px 5px 6px -2px rgba(0, 0, 0, 0.33);
+.woocommerce-notices-wrapper .site-heading img {
+  width: 100px;
 }
 
-.elementor-45 .elementor-element.elementor-element-579c986 img, #header-alt-logo img{
-  width: 70px;
-  position: fixed;
-  animation: logo 1s ease-in-out 0s 1 normal both;
-  top: 10px;
+.woocommerce-MyAccount-content .site-heading img {
+  width: 37px;
+}
+.woocommerce-MyAccount-content .site-heading {
+  font-size: 22px;
+  font-weight: bold;
+}
+.woocommerce-orders-table.woocommerce-MyAccount-orders.shop_table.shop_table_responsive.my_account_orders.account-orders-table {
+  box-shadow: -3px 0px 10px 4px #ddddddd6;
+  padding: 30px;
+  border-radius: 30px;
+}
+.woocommerce-orders-table thead {
+  background: #2e464a;
+  color: #fff;
+  height: 45px;
+  text-align: center;
+}
+.woocommerce-orders-table tbody tr th {
+  border: 2px solid #fff !important;
+  background: #ddd !important;
 }
 
-#whatsapp-icon {
-  animation: logo 1s ease-in-out 0s 1 normal both;
+.woocommerce-orders-table tbody tr td {
+  border: 2px solid #fff !important;
+  background: #ddd !important;
+  font-size: 16px;
+  color: #2e464a;
+}
+.woocommerce-orders-table thead tr th {
+  border: 2px solid #fff;
+}
+.woocommerce-orders-table tbody tr th a {
+  color: #2e464a;
+}
+.woocommerce-orders-table tbody tr td a {
+  color: #0081a8;
+  font-size: 14px;
+  float: right;
+}
+.woocommerce-orders-table tbody tr td ul {
+  list-style: none;
+  padding: 0;
 }
 
-@keyframes logo {
-  0% {
-    opacity: 0;
-    transform: translateY(-250px);
-  }
 
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.view-order-box .order-title {
+  font-size: 22px;
+}
+.view-order-box .product-images img {
+  width: 100%;
+  border-radius: 30px;
+}
+.view-order-box .order-details ul {
+  list-style: none;
+}
+.view-order-box .order-details img {
+  width: 41px;
+}
+.view-order-box .order-details ul li {
+  padding: 10px 0px;
 }
 
+.view-order-box .order-details ul li span {
+  color: #717171;
+  font-weight: normal;
+  position: relative;
+  left: 47px;
+  top: -10px;
+}
+
+
+.show-order-summary {
+  list-style: none;
+}
+.show-order-summary li {
+  background: #ddd;
+  padding: 10px 20px;
+  margin: 10px 0px;
+  color: #2e464a;
+  display: flex;
+  justify-content: space-between;
+}
+.show-order-summary li:last-of-type {
+  background: #2e464a;
+  color: #fff;
+}
+.button.wc-forward {
+  background: #2e464a;
+  color: #fff;
+  padding: 10px 40px;
+  font-size: 18px;
+  margin-left: 2rem;
+}

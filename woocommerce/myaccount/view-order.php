@@ -21,6 +21,15 @@
 defined('ABSPATH') || exit;
 
 $notes = $order->get_customer_order_notes();
+
+
+$order = wc_get_order( $order_id );
+if ( ! $order ) {
+    return;
+}
+
+$show_customer_details = is_user_logged_in() && $order->get_user_id() === get_current_user_id();
+
 ?>
 <style>
 	.myaccount-box {
@@ -107,37 +116,121 @@ $notes = $order->get_customer_order_notes();
 	<h2>Order History</h2>
 	<span>More details</span>
 </div>
-<p>
-	<?php
-	printf(
-		/* translators: 1: order number 2: order date 3: order status */
-		esc_html__('Order #%1$s was placed on %2$s and is currently %3$s.', 'woocommerce'),
-		'<mark class="order-number">' . $order->get_order_number() . '</mark>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		'<mark class="order-date">' . wc_format_datetime($order->get_date_created()) . '</mark>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		'<mark class="order-status">' . wc_get_order_status_name($order->get_status()) . '</mark>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	);
-	?>
-</p>
 
-<?php if ($notes) : ?>
-	<ol class="woocommerce-OrderUpdates commentlist notes">
-		<?php foreach ($notes as $note) : ?>
-			<li class="woocommerce-OrderUpdate comment note">
-				<div class="woocommerce-OrderUpdate-inner comment_container">
-					<div class="woocommerce-OrderUpdate-text comment-text">
-						<p class="woocommerce-OrderUpdate-meta meta"><?php echo date_i18n(esc_html__('l jS \o\f F Y, h:ia', 'woocommerce'), strtotime($note->comment_date)); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-																		?></p>
-						<div class="woocommerce-OrderUpdate-description description">
-							<?php echo wpautop(wptexturize($note->comment_content)); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-							?>
-						</div>
-						<div class="clear"></div>
-					</div>
-					<div class="clear"></div>
-				</div>
-			</li>
-		<?php endforeach; ?>
-	</ol>
-<?php endif; ?>
-
-<?php do_action('woocommerce_view_order', $order_id); ?>
+<div class="view-order-box container">
+	<div class="row mb-5">
+		<div class="col-md-6">
+			<h2 class="order-title">
+			<?php
+			$items = $order->get_items();
+			foreach ( $items as $item ) {
+				echo esc_html( $item->get_name() );
+			}
+			?>
+			</h2>
+			<div class="product-images">
+				<?php
+				foreach ($items as $item) {
+					$product = $item->get_product();
+					$product_image_url = wp_get_attachment_image_url($product->get_image_id(), 'full');
+					if ($product_image_url) {
+						echo '<img src="' . esc_url($product_image_url) . '" alt="' . esc_attr($item->get_name()) . '" />';
+					}
+				}
+				?>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="order-details">
+				<ul>
+					<li>
+						<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/location.png" alt="">
+						Pick-up Location <br>
+						<span> 
+							<?php
+							foreach ($items as $item) {
+								$item_meta_data = $item->get_meta_data();
+								foreach ($item_meta_data as $meta) {
+									if ($meta->key === 'meeting_point') {
+										echo esc_html($meta->value);
+									}
+								}
+							}
+							?> 
+						</span>
+					</li>
+					<li>
+						<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/calender  icon.png" alt="">
+						Date <br>
+						<span> 
+							<?php
+							foreach ($items as $item) {
+								$item_meta_data = $item->get_meta_data();
+								foreach ($item_meta_data as $meta) {
+									if ($meta->key === 'date') {
+										echo esc_html($meta->value);
+									}
+								}
+							}
+							?> 
+						</span>
+					</li>
+					<li>
+						<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/clock icon.png" alt="">
+						Duration <br>
+						<span> 
+							<?php
+							foreach ($items as $item) {
+								$product = $item->get_product();
+								$duration = get_field('duration', $product->get_id());
+								echo esc_html($duration);
+							}
+							?> 
+						</span>
+					</li>
+					<li>
+						<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/overview icon.png" alt="">
+						Overview <br>
+						<span> 
+							<?php
+							foreach ($items as $item) {
+								$product = $item->get_product();
+								$description = wp_trim_words($product->get_description(), 30);
+								echo esc_html($description);
+							}
+							?> 
+						</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="row mt-5">
+		<div class="col-md-6" style="border-right: 1px solid #d1d1d1;"></div>
+		<div class="col-md-6">
+			<ul class="show-order-summary pb-5">
+				<li>
+					<span>Price Paid:</span>
+					<span><?php echo $order->get_formatted_order_total(); ?></span>
+				</li>
+				<li>
+					<span>Subtotal:</span>
+					<span><?php echo $order->get_subtotal_to_display(); ?></span>
+				</li>
+				<li>
+					<span>Tax total:</span>
+					<span><?php echo esc_html($order->get_total_tax()); ?></span>
+				</li>
+				<li>
+					<span>Grand Total:</span>
+					<span><?php echo $order->get_formatted_order_total(); ?></span>
+				</li>
+			</ul>
+			<a href="<?php echo esc_url( add_query_arg( array( 'order_again' => $order->get_id() ), wc_get_cart_url() ) ); ?>" class="button wc-forward">
+				<?php esc_html_e( 'Book Again', 'woocommerce' ); ?>
+			</a>
+		</div>
+	</div>
+	
+</div>

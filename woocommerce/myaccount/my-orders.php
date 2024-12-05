@@ -32,9 +32,11 @@ $customer_orders = get_posts(
 	)
 );
 
+
+
 if ( $customer_orders ) : ?>
 
-	<h2><?php echo apply_filters( 'woocommerce_my_account_my_orders_title', esc_html__( 'Recent orders', 'woocommerce' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></h2>
+	<h2><?php echo esc_html( apply_filters( 'woocommerce_my_account_my_orders_title', __( 'Recent orders', 'woocommerce' ) ) ); ?></h2>
 
 	<table class="shop_table shop_table_responsive my_account_orders">
 
@@ -60,11 +62,13 @@ if ( $customer_orders ) : ?>
 
 							<?php elseif ( 'order-number' === $column_id ) : ?>
 								<a href="<?php echo esc_url( $order->get_view_order_url() ); ?>">
-									<?php echo _x( '#', 'hash before order number', 'woocommerce' ) . $order->get_order_number(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+									<?php echo esc_html( _x( '#', 'hash before order number', 'woocommerce' ) . $order->get_order_number() ); ?>
 								</a>
 
 							<?php elseif ( 'order-date' === $column_id ) : ?>
-								<time datetime="<?php echo esc_attr( $order->get_date_created()->date( 'c' ) ); ?>"><?php echo esc_html( wc_format_datetime( $order->get_date_created() ) ); ?></time>
+								<time datetime="<?php echo esc_attr( $order->get_date_created()->date( 'c' ) ); ?>">
+									<?php echo esc_html( wc_format_datetime( $order->get_date_created() ) ); ?>
+								</time>
 
 							<?php elseif ( 'order-status' === $column_id ) : ?>
 								<?php echo esc_html( wc_get_order_status_name( $order->get_status() ) ); ?>
@@ -72,7 +76,11 @@ if ( $customer_orders ) : ?>
 							<?php elseif ( 'order-total' === $column_id ) : ?>
 								<?php
 								/* translators: 1: formatted order total 2: total order items */
-								printf( _n( '%1$s for %2$s item', '%1$s for %2$s items', $item_count, 'woocommerce' ), $order->get_formatted_order_total(), $item_count ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								printf(
+									_n( '%1$s for %2$s item', '%1$s for %2$s items', $item_count, 'woocommerce' ),
+									$order->get_formatted_order_total(),
+									$item_count
+								); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								?>
 
 							<?php elseif ( 'order-actions' === $column_id ) : ?>
@@ -93,3 +101,7 @@ if ( $customer_orders ) : ?>
 		</tbody>
 	</table>
 <?php endif; ?>
+
+<pre>
+<?php print_r($customer_orders); ?>
+</pre>

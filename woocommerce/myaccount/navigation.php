@@ -33,13 +33,13 @@ do_action('woocommerce_before_account_navigation');
 				</a>
 			</li>
 			<li>
-				<a href="<?php echo site_url(); ?>/edit-my-account/">
+				<a href="<?php echo site_url(); ?>/my-account/edit-account/">
 					<img class="brath-image" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/edit my account icon.png" alt="">
 					<p>Edit My Account</p>
 				</a>
 			</li>
 			<li>
-				<a href="<?php echo site_url(); ?>/order-history/">
+				<a href="<?php echo site_url(); ?>/my-account/order-history/">
 					<img class="brath-image" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/order history icon.jpg" alt="">
 					<p>Order History</p>
 				</a>
