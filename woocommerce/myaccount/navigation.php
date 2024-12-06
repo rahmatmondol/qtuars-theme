@@ -28,7 +28,7 @@ do_action('woocommerce_before_account_navigation');
 		<ul>
 			<li>
 				<a href="<?php echo site_url(); ?>/my-account">
-					<img class="brath-image" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/my account icon.png" alt="">
+					<img class="brath-image" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/my-account-icon.png" alt="">
 					<p class="active">My Account</p>
 				</a>
 			</li>
@@ -45,7 +45,7 @@ do_action('woocommerce_before_account_navigation');
 				</a>
 			</li>
 			<li>
-				<a href="<?php echo site_url(); ?>/wish-list/">
+				<a href="<?php echo site_url(); ?>/wishlist/">
 					<img class="brath-image" src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/wishlist icon.png" alt="">
 					<p>Wish List</p>
 				</a>

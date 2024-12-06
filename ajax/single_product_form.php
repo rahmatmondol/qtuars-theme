@@ -66,6 +66,7 @@ function qtuars_add_cart_event()
 }
 
 
+
 /**
  * Check if diver_license has an image and store it in the library
  *

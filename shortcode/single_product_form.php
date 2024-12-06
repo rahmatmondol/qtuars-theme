@@ -120,13 +120,22 @@ function custom_shortcode_function()
                 </div>
             <?php endif; ?>
 
-            <div class="form-group mt-3">
-                <button type="submit" class="add-to-cart">Add to Cart</button>
-                <span class="price">
-                    <?php  echo wc_price($product->get_price()); ?>
-                </span>
-                <input type="hidden" name="product_id" value="<?php echo $productId; ?>">
-            </div>
+           <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group mt-3">
+                        <button type="submit" class="add-to-cart">Add to Cart</button>
+                        <span class="price">
+                            <?php  echo wc_price($product->get_price()); ?>
+                        </span>
+                        <input type="hidden" name="product_id" id="product_id" value="<?php echo $productId; ?>">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group mt-3">
+                        <button type="button" id="add-to-wishlist" class="add-to-cart">Add to wishlist <i class="fa-regular fa-heart"></i></button>
+                    </div>
+                </div>
+           </div>
             <hr/>
 
         </form>
@@ -150,6 +159,29 @@ function custom_shortcode_function()
                     success: function (response) {
                         console.log(response);
                         location.reload();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.status);
+                        console.log(thrownError);
+                        alert('Something went wrong');
+                    }
+                });
+            });
+
+             //add to wishlist
+             $("#add-to-wishlist").on('click', function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: '<?php echo admin_url('admin-ajax.php'); ?>',
+                    type: 'post',
+                    data: {
+                        action: 'qtuars_add_to_wishlist',
+                        product_id: $('#product_id').val()
+                    },
+                    success: function (response) {
+                            console.log(response);
+                            location.reload();
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status);

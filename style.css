@@ -105,3 +105,192 @@ Version: 1.0
   font-size: 18px;
   margin-left: 2rem;
 }
+
+
+.no-order-box {
+  min-width: 500px;
+  background: #2e464a;
+  height: 200px;
+  max-width: 700px;
+  margin: 0 auto;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.no-order-box h2 {
+  font-size: 18px;
+}
+
+.profile-uploader label img {
+  width: 40px;
+  position: relative;
+  top: -50px;
+  left: 138px;
+  cursor: pointer;
+}
+
+
+.woocommerce-EditAccountForm.edit-account .form-group {
+  margin: 15px 10px;
+}
+.woocommerce-EditAccountForm.edit-account .form-control {
+  margin: 5px 0px;
+  border: 1px solid #ddd;
+  border-radius: 0;
+  height: 45px;
+}
+.woocommerce-EditAccountForm.edit-account label {
+  font-size: 17px;
+  color: #2e464a;
+}
+.woocommerce-EditAccountForm.edit-account .form-check.form-switch {
+  background: #f5f5f5;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 10px 0px;
+  position: relative;
+}
+
+#account_age_above_22 {
+  font-size: 30px;
+}
+
+.woocommerce-EditAccountForm.edit-account .accept-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.woocommerce-EditAccountForm.edit-account .document-title {
+  font-size: 26px;
+  font-weight: 600;
+  color: #2e464a;
+}
+.woocommerce-EditAccountForm.edit-account .custom-file-label {
+  background: #2e464a;
+  color: #fff;
+  padding: 10px 40px;
+  cursor: pointer;
+}
+.woocommerce-EditAccountForm.edit-account  .custom-file-input {
+  position: relative;
+  left: 88px;
+  bottom: 33px;
+  z-index: -1;
+}
+
+.payment-methods {
+  display: flex;
+  gap: 50px;
+}
+.payment-methods img {
+  width: 130px;
+  cursor: pointer;
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
+.payment-methods img:hover {
+  filter: grayscale(0);
+  opacity: 1;
+  transition: all 0.5s ease-in-out;
+}
+.woocommerce-EditAccountForm.edit-account .save_account_details_btn {
+  background: #2e464a;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  padding: 10px 40px;
+}
+.woocommerce-EditAccountForm.edit-account .save_account_details_btn:hover {
+  background: #2e464a;
+}
+
+
+.wishlist_icon a {
+  color: #2e464a;
+  font-size: 24px;
+}
+.wishlist_icon #wishlist_count {
+  position: absolute;
+  min-width: 1.6em;
+  height: 1.6em;
+  line-height: 1.5em;
+  top: -5px;
+  inset-inline-end: -.7em;
+  border-radius: 100%;
+  color: var(--items-indicator-text-color,#fff);
+  background-color: #d9534f;
+  text-align: center;
+  font-size: 10px;
+}
+.wishlist_icon {
+  position: relative;
+}
+
+
+.wishlist-card img {
+  width: 100%;
+  border-radius: 30px !important;
+  height: 250px !important;
+  object-fit: cover;
+}
+.wishlist-body .card-title {
+  font-size: 18px;
+  font-weight: 600;
+  padding: 10px 0px;
+}
+.wishlist-body .wishlist-text {
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+}
+.wishlist-body .view-product {
+  background: #2e464a;
+  color: #fff;
+  padding: 10px 40px;
+}
+
+
+.wishlist-card {
+  position: relative;
+}
+.wishlist-card #remove_wishlist {
+  background: #f00;
+  width: 24px;
+  text-align: center;
+  border-radius: 100%;
+  color: #fff;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  box-shadow: 0px 0 10px 5px #0000001f;
+}
+
+
+.woocommerce-checkout #customer_details .col-2 {
+  display: none;
+}
+.woocommerce-checkout #customer_details .col-1 {
+  width: 100%;
+}
+.shop_table.woocommerce-checkout-review-order-table thead tr th {
+  background: #2e464a;
+  color: #fff;
+}
+#payment.woocommerce-checkout-payment {
+  background: #f6f6f6;
+}
+.form-row.place-order {
+  text-align: center;
+}
+.place-order #place_order {
+  float: none !important;
+  background: #2e464a;
+  color: #fff;
+  border: none;
+  font-size: 18px;
+  padding: 10px 40px;
+}

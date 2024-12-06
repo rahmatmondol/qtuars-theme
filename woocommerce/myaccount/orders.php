@@ -21,10 +21,6 @@ defined( 'ABSPATH' ) || exit;
 
 do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 
-
-
-<?php if ( $has_orders ) : ?>
-
 <style>
 	.woocommerce-MyAccount-navigation {
 	display: none;
@@ -35,8 +31,10 @@ do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 </style>
 
 <h2 class="site-heading">
-	<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/order history icon.jpg" alt=""> order history
+	<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/order history icon.jpg" alt=""> Order history
 </h2>
+
+<?php if ( $has_orders ) : ?>
 
 	<table class="woocommerce-orders-table woocommerce-MyAccount-orders shop_table shop_table_responsive my_account_orders account-orders-table">
 		<thead>
@@ -126,7 +124,9 @@ do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 
 <?php else : ?>
 
-	<?php wc_print_notice( esc_html__( 'No order has been made yet.', 'woocommerce' ) . ' <a class="woocommerce-Button wc-forward button' . esc_attr( $wp_button_class ) . '" href="' . esc_url( apply_filters( 'woocommerce_return_to_shop_redirect', wc_get_page_permalink( 'shop' ) ) ) . '">' . esc_html__( 'Browse products', 'woocommerce' ) . '</a>', 'notice' ); // phpcs:ignore WooCommerce.Commenting.CommentHooks.MissingHookComment ?>
+	<div class="no-order-box">
+		<h2>Correctly No Orders Have Been Placed</h2>
+	</div>
 
 <?php endif; ?>
 
