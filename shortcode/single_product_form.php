@@ -8,6 +8,9 @@ function custom_shortcode_function()
     $product = wc_get_product($productId);
     $meeting_points = get_field('meeting_points', $productId);
     $type = get_field('product_type', $productId);
+    $minimum_guest = get_field('minimum_guest', $productId) ?? 0;
+    $variations = $product->is_type('variable') ? $product->get_available_variations() : [];
+    $add_ons = get_field('product', $productId);
     ob_start();
     ?>
     <div class="checkout-form">
@@ -46,6 +49,23 @@ function custom_shortcode_function()
                     ?>
                 </select>
             </div>
+
+            <?php if ($variations) : ?>
+                <div class="row mt-5 duration-variation-group">
+                    <h4 class="age-title">Please Select</h4>
+                    <?php foreach ($variations as $variation) : ?>
+                        <div class="col-3">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="variation_id" id="variation-<?php echo $variation['variation_id']; ?>" value="<?php echo $variation['variation_id']; ?>" checked>
+                                <label class="form-check-label" for="variation-<?php echo $variation['variation_id']; ?>">
+                                    <?php echo $variation['attributes']['attribute_duration']; ?>
+                                </label>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+
             <?php if ($type) : ?>
                 <div class="form-group age-group mt-3 mb-5">
                     <label for="age">Age</label>
@@ -88,7 +108,7 @@ function custom_shortcode_function()
                 </div>
             <?php else: ?>
                 <div class="row mt-5">
-                <h4 class="age-title">No. of Guests</h4>
+                <h4 class="age-title">No. of Guests <?php echo $minimum_guest > 0 ? '( ' . $minimum_guest . ' guests minimum )': '' ?></h4>
                     <div class="col-3">
                         <div class="form-group age-group mt-3 mb-5">
                             <label for="age">Child age 3-11</label>
@@ -96,7 +116,7 @@ function custom_shortcode_function()
                                 <div class="input-group-prepend">
                                     <button type="button" id="minus" onclick="decreaseChildAge()">-</button>
                                 </div>
-                                <input type="text" class="form-control" id="child_age" name="child_age" value="3" readonly>
+                                <input type="text" class="form-control" id="child" name="child" value="0" readonly>
                                 <div class="input-group-append">
                                     <button type="button" id="plus" onclick="increaseChildAge()">+</button>
                                 </div>
@@ -110,7 +130,7 @@ function custom_shortcode_function()
                                 <div class="input-group-prepend">
                                     <button type="button" id="minus" onclick="decreaseAdultAge()">-</button>
                                 </div>
-                                <input type="text" class="form-control" id="adult_age" name="adult_age" value="12" readonly>
+                                <input type="text" class="form-control" id="adult" name="adult" value="0" readonly>
                                 <div class="input-group-append">
                                     <button type="button" id="plus" onclick="increaseAdultAge()">+</button>
                                 </div>
@@ -136,10 +156,32 @@ function custom_shortcode_function()
                     </div>
                 </div>
            </div>
+
+            <?php if($add_ons) : ?>
+                <div class="row mb-5 addons-group-container">
+                    <h4 class="age-title">Customize your Camping trip and Select ADD-ONS</h4> 
+                    <div class="col-md-4">
+                        <div class="form-group mt-3 addon-group">
+                            <?php foreach ($add_ons as $addon) : ?>
+                                <div class="form-check">
+                                    <label class="form-check-label" for="addon-<?php echo $addon->ID; ?>">
+                                        <h5 class="addon-title"><?php echo $addon->post_title; ?></h5>
+                                        <p><?php echo $addon->post_content; ?></p>
+                                        <span class="price"><?php echo wc_price(wc_get_product($addon->ID)->get_price()); ?></span>
+                                    </label>
+                                    <input class="form-check-input" type="checkbox" value="<?php echo $addon->ID; ?>" id="addon-<?php echo $addon->ID; ?>" name="addons[]">
+                                    
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
             <hr/>
 
         </form>
     </div>
+
 
     <script>
         //jQuery ready start
@@ -205,29 +247,29 @@ function custom_shortcode_function()
         }
 
         function increaseChildAge() {
-            var age = document.getElementById('child_age').value;
-            if (age < 11) {
-                document.getElementById('child_age').value = parseInt(age) + 1;
+            var age = document.getElementById('child').value;
+            if (age < 0) {
+                document.getElementById('child').value = parseInt(age) + 1;
 
             }
         }
         function decreaseChildAge() {
-            var age = document.getElementById('child_age').value;
-            if (age > 3) {
-                document.getElementById('child_age').value = parseInt(age) - 1;
+            var age = document.getElementById('child').value;
+            if (age > 0) {
+                document.getElementById('child').value = parseInt(age) - 1;
             }
         }
 
         function increaseAdultAge() {
-            var age = document.getElementById('adult_age').value;
-            if (age < 80) {
-                document.getElementById('adult_age').value = parseInt(age) + 1;
+            var age = document.getElementById('adult').value;
+            if (age < 0) {
+                document.getElementById('adult').value = parseInt(age) + 1;
             }
         }
         function decreaseAdultAge() {
-            var age = document.getElementById('adult_age').value;
-            if (age > 12) {
-                document.getElementById('adult_age').value = parseInt(age) - 1;
+            var age = document.getElementById('adult').value;
+            if (age > 0) {
+                document.getElementById('adult').value = parseInt(age) - 1;
             }
         }
     </script>

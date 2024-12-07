@@ -22,10 +22,13 @@ function qtuars_add_cart_event()
     $time           = sanitize_text_field($_POST['time'] ?? '');
     $meeting_point  = sanitize_text_field($_POST['meeting_point'] ?? '');
     $age            = sanitize_text_field($_POST['age'] ?? '');
-    $adult_age      = sanitize_text_field($_POST['adult_age'] ?? '');
-    $child_age      = sanitize_text_field($_POST['child_age'] ?? '');
+    $adult          = sanitize_text_field($_POST['adult'] ?? '');
+    $child          = sanitize_text_field($_POST['child'] ?? '');
     $product_id     = sanitize_text_field($_POST['product_id'] ?? '');
+    $variation_id   = sanitize_text_field($_POST['variation_id'] ?? '');
+    $addons         = $_POST['addons'] ?? [];
 
+    
     if (
         empty($name)
         || empty($email)
@@ -59,7 +62,18 @@ function qtuars_add_cart_event()
     if ($diver_license)  $args['diver_license']  = $diver_license;
     if ($driver_passport)$args['driver_passport'] = $driver_passport;
 
-    WC()->cart->add_to_cart($product_id, 1, [], $args);
+
+    foreach ($addons as $addon_id) {
+        WC()->cart->add_to_cart($addon_id, 1, 0, []);
+    }
+    
+
+    if ($variation_id) {
+        WC()->cart->add_to_cart($product_id, 1, $variation_id, $args);
+    } else {
+        WC()->cart->add_to_cart($product_id, 1, 0, $args);
+    }
+
 
     echo json_encode(true);
     exit;

@@ -294,3 +294,49 @@ Version: 1.0
   font-size: 18px;
   padding: 10px 40px;
 }
+
+
+.duration-variation-group .form-check {
+  position: relative;
+  padding: 4px 0px;
+}
+.duration-variation-group .form-check-input {
+  position: absolute;
+  right: -32px;
+  bottom: 0px;
+  padding: 10px;
+  background: #ddd;
+}
+.duration-variation-group .form-check label {
+  padding: 0;
+}
+.duration-variation-group .form-check-input:checked {
+  background: #00dbff;
+  border-color: #00dbff;
+  box-shadow: 0px 0px 10px 0px #949494;
+}
+
+
+.addons-group-container .addon-group {
+  background: #f4f3f3;
+  border-radius: 10px;
+  padding: 15px;
+}
+.addons-group-container .addon-group .form-check {
+  padding: 10px 0px;
+  position: relative;
+  width: 90%;
+}
+.addons-group-container .addon-group input {
+  position: absolute;
+  padding: 12px;
+  right: -35px;
+  top: 40%;
+}
+.addons-group-container .addon-group .addon-title {
+  margin: 5px 0px;
+}
+.addons-group-container .addon-group p {
+  margin: 5px 0px;
+  font-size: 14px;
+}
