@@ -109,8 +109,8 @@ function custom_shortcode_function()
             <?php else: ?>
                 <div class="row mt-5">
                 <h4 class="age-title">No. of Guests <?php echo $minimum_guest > 0 ? '( ' . $minimum_guest . ' guests minimum )': '' ?></h4>
-                    <div class="col-3">
-                        <div class="form-group age-group mt-3 mb-5">
+                    <div class="col-md-3">
+                        <div class="form-group age-group mt-3 mb-md-5">
                             <label for="age">Child age 3-11</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -123,8 +123,8 @@ function custom_shortcode_function()
                             </div>
                         </div>
                     </div>
-                    <div class="col-3">
-                        <div class="form-group age-group mt-3 mb-5">
+                    <div class="col-md-3">
+                        <div class="form-group age-group mt-3 mb-md-5">
                             <label for="age">Adult age 12+</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">

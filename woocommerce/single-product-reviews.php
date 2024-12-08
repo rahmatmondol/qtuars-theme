@@ -134,17 +134,21 @@ if ( ! comments_open() ) {
 							style="height: 216px;"></textarea>
 					</p>
 
-					<div class="submit-group">
-						<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Submit">
-							<input type="hidden" name="comment_post_ID" value="<?php the_ID(); ?>" id="comment_post_ID">
-							<input type="hidden" name="comment_parent" id="comment_parent" value="0">
-						</p>
-
-						<div class="share-tripadvisor">
-							<a href="https://www.tripadvisor.com/UserReview" target="_blank" class="share-button"> 
-								<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/share.png" alt="">
-							</a>
-							<span>Simply copy and paste your review and share it on tripadvisor</span>
+					<div class="submit-group row">
+						<div class="col-md-2">
+							<p class="form-submit ">
+								<input name="submit" type="submit" id="submit" class="submit d-block d-md-inline-block" value="Submit">
+								<input type="hidden" name="comment_post_ID" value="<?php the_ID(); ?>" id="comment_post_ID">
+								<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+							</p>
+						</div>
+						<div class="col-md-8">
+							<div class="share-tripadvisor ">
+								<a href="https://www.tripadvisor.com/UserReview" target="_blank" class="share-button d-block d-md-inline-block"> 
+									<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/share.png" alt="">
+								</a>
+								<span>Simply copy and paste your review and share it on tripadvisor</span>
+							</div>
 						</div>
 					</div>
 
