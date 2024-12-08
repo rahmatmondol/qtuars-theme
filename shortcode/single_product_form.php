@@ -248,10 +248,7 @@ function custom_shortcode_function()
 
         function increaseChildAge() {
             var age = document.getElementById('child').value;
-            if (age < 0) {
-                document.getElementById('child').value = parseInt(age) + 1;
-
-            }
+            document.getElementById('child').value = parseInt(age) + 1;
         }
         function decreaseChildAge() {
             var age = document.getElementById('child').value;
@@ -262,9 +259,8 @@ function custom_shortcode_function()
 
         function increaseAdultAge() {
             var age = document.getElementById('adult').value;
-            if (age < 0) {
-                document.getElementById('adult').value = parseInt(age) + 1;
-            }
+            document.getElementById('adult').value = parseInt(age) + 1;
+            
         }
         function decreaseAdultAge() {
             var age = document.getElementById('adult').value;

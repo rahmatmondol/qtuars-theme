@@ -31,7 +31,7 @@ function qtuars_wishlists_shortcode_function() {
               ?>
               <div class="col-md-4">
                 <div class="wishlist-card">
-                    <span id="remove_wishlist"><i class="fa fa-close"></i></span>
+                    <span class="remove_wishlist"><i class="fa fa-close"></i></span>
                   <?php echo $product_image; ?>
                   <div class="wishlist-body">
                     <h5 class="card-title"><?php echo $product_title; ?></h5>
@@ -50,7 +50,7 @@ function qtuars_wishlists_shortcode_function() {
 
     <script>
         jQuery(document).ready(function ($) {
-            $('#remove_wishlist').click(function () {
+            $('.remove_wishlist').click(function () {
                 $.ajax({
                     url: '<?php echo admin_url('admin-ajax.php'); ?>',
                     type: 'POST',

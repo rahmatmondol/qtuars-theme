@@ -257,7 +257,7 @@ Version: 1.0
 .wishlist-card {
   position: relative;
 }
-.wishlist-card #remove_wishlist {
+.wishlist-card .remove_wishlist {
   background: #f00;
   width: 24px;
   text-align: center;
@@ -339,4 +339,94 @@ Version: 1.0
 .addons-group-container .addon-group p {
   margin: 5px 0px;
   font-size: 14px;
+}
+
+
+.woocommerce-Reviews-title {
+  background: #2e464a;
+  width: fit-content;
+  color: #fff;
+  padding: 10px 40px;
+  font-size: 18px;
+}
+.comment-form-rating {
+  display: flex;
+  gap: 10px;
+  padding: 15px 0px;
+}
+.comment-form-rating .stars a {
+  color: #24777f;
+  font-size: 20px;
+}
+.comment-form-author input, .comment-form-phone input, .comment-form-email input,.comment-form-comment textarea{
+  background: #f4f3f3;
+  padding: 12px !important;
+  border-color: #cacaca !important;
+  border-radius: 0px !important;
+}
+
+.submit-group {
+  display: flex;
+  padding: 40px 0;
+  gap: 30px;
+  align-items: center;
+}
+.form-submit #submit {
+  background: #2e464a !important;
+  color: #fff !important;
+  padding: 15px 40px !important;
+}
+.share-tripadvisor .share-button {
+  background: #f4f3f3;
+  padding: 10px 11px;
+  border-radius: 20px;
+}
+.share-tripadvisor .share-button img {
+  width: 80px;
+}
+.share-tripadvisor span {
+  padding: 0px 20px;
+  color: #297e8b;
+}
+.submit-group .form-submit {
+  margin: 0 !important;
+}
+
+.boxes .form-check.form-check-inline input {
+  padding: 8px !important;
+  width: 14px !important;
+}
+
+.form-check.form-check-inline input:checked {
+  background-color: #24777F;
+}
+
+.form-check.form-check-inline.form-switch #flexSwitchCheckChecked {
+  width: 40px !important;
+}
+
+#inlineRadio1:checked {
+  background: #24777F !important;
+}
+
+#inlineRadio2:checked {
+  background: #24777F !important;
+}
+
+.form-check.form-check-inline.form-switch .form-check-label {
+  width: 175px;
+  color: #424242;
+  font-weight: 100 !important;
+}
+
+.check {
+  color: #307e86;
+  font-size: 16px;
+  font-family: "gill-sans";
+  padding: 20px 0px;
+}
+
+.form-check-label {
+  font-weight: 400 !important;
+  font-family: "gill-sans" !important;
 }

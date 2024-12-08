@@ -26,3 +26,22 @@ include_once('shortcode/wishlists.php');
 include_once('inc/checkout_fileld_filter.php');
 include_once('inc/order_table.php');
 
+
+// Save the phone number
+add_action('comment_post', 'save_comment_phone_meta');
+function save_comment_phone_meta($comment_id) {
+    if (!empty($_POST['phone'])) {
+        add_comment_meta($comment_id, 'phone', sanitize_text_field($_POST['phone']));
+    }
+}
+
+// Display the phone number in the review
+add_filter('get_comment_text', 'display_comment_phone_meta');
+function display_comment_phone_meta($comment_text) {
+    $comment_id = get_comment_ID();
+    $phone = get_comment_meta($comment_id, 'phone', true);
+    if ($phone) {
+        $comment_text .= '<p><strong>' . __('Phone:', 'your-text-domain') . '</strong> ' . esc_html($phone) . '</p>';
+    }
+    return $comment_text;
+}
