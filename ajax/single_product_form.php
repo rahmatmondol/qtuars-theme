@@ -28,9 +28,12 @@ function qtuars_add_cart_event()
 
     $adult_count    = sanitize_text_field($_POST['adult_count'] ?? '');
     $child_count    = sanitize_text_field($_POST['child_count'] ?? '');
+    $total_price    = sanitize_text_field($_POST['total_price'] ?? '');
+
     $child          = sanitize_text_field($_POST['Child'] ?? '');
     $adult          = sanitize_text_field($_POST['Adult'] ?? '');
     $private        = sanitize_text_field($_POST['Private'] ?? '');
+
     
     if (
         empty($name)
@@ -63,14 +66,14 @@ function qtuars_add_cart_event()
     if ($diver_license)  $args['diver_license']     = $diver_license;
     if ($driver_passport)$args['driver_passport']   = $driver_passport;
 
-    if ($adult_count)    $args['adult']             = $adult_count;
-    if ($child_count)    $args['child']             = $child_count;
-    if ($private)        $args['private']           = $private.'OMR';
+    if ($adult)         $args['adult']             = $adult_count;
+    if ($child)         $args['child']             = $child_count;
+    if ($private)       $args['private']           = 'yes';
+    if ($total_price)   $args['total']             = $total_price;
 
     foreach ($addons as $addon_id) {
         WC()->cart->add_to_cart($addon_id, 1, 0, []);
     }
-
 
     if ($variation_id) {
         WC()->cart->add_to_cart($product_id, 1, $variation_id, $args);

@@ -14,6 +14,7 @@ function custom_shortcode_function()
     $child          = get_field('child', $productId);
     $adult          = get_field('adult', $productId);
     $private        = get_field('private', $productId);
+    $guest          = get_field('guest', $productId);
     ob_start();
     ?>
 <div class="checkout-form">
@@ -55,126 +56,162 @@ function custom_shortcode_function()
             </select>
         </div>
 
-        <div class="mt-5 duration-variation-group">
-            <h4 class="age-title">Please Select</h4>
-            <div class="persons d-flex flex-wrap gap-2 gap-md-5 flex-column flex-md-row">
+        <!-- select guest -->
+        <?php if ($guest) : ?>
+            <div class="mt-5 duration-variation-group">
+                <h4 class="age-title">Please Select</h4>
+                <div class="persons d-flex flex-wrap gap-2 gap-md-5 flex-column flex-md-row">
+                    <?php if ($adult) : ?>
+                    <!-- adult -->
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input Adult" data-price="<?php echo $adult; ?>" id="adult_price"
+                            type="checkbox" name="Adult" value="<?php echo $adult; ?>">
+                        <label class="form-check-label" for="adult_price">
+                            Adult
+                            <?php echo $adult; ?>
+                            OMR
+                        </label>
+                    </div>
+                    <!-- adult -->
+                    <?php endif; ?>
+
+                    <?php if ($child) : ?>
+                    <!-- child -->
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input Child" data-price="<?php echo $child; ?>" id="Child_price"
+                            type="checkbox" name="Child" value="<?php echo $child; ?>">
+                        <label class="form-check-label" for="Child_price">
+                            Child
+                            <?php echo $child; ?>
+                            OMR
+                        </label>
+                    </div>
+                    <!-- child -->
+                    <?php endif; ?>
+
+                    <?php if ($private) : ?>
+                    <!-- private -->
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input Private" data-price="<?php echo $private; ?>" id="private_price"
+                            type="checkbox" name="Private" value="<?php echo $private; ?>">
+                        <label class="form-check-label" for="private_price">
+                            Private
+                            <?php echo $private; ?>
+                            OMR
+                        </label>
+                    </div>
+                    <!-- private -->
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="row mt-5">
                 <?php if ($adult) : ?>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input Adult" data-price="<?php echo $adult; ?>" id="adult_price"
-                        type="checkbox" name="Adult" value="<?php echo $adult; ?>">
-                    <label class="form-check-label" for="adult_price">
-                        Adult
-                        <?php echo $adult; ?>
-                        OMR
-                    </label>
+                <h4 class="age-title">No. of Guests
+                    <?php echo $minimum_guest > 0 ? '( ' . $minimum_guest . ' guests minimum )': '' ?>
+                </h4>
+                <div class="col-md-3">
+                    <div class="form-group age-group mt-3 mb-md-5">
+                        <label for="age">Adult age 12+</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button type="button" class="decreaseAdult">-</button>
+                            </div>
+                            <input type="text" class="form-control" id="adult" name="adult_count" value="0" readonly>
+                            <div class="input-group-append">
+                                <button type="button" class="increaseAdult">+</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <?php endif; ?>
+
                 <?php if ($child) : ?>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input Child" data-price="<?php echo $child; ?>" id="Child_price"
-                        type="checkbox" name="Child" value="<?php echo $child; ?>">
-                    <label class="form-check-label" for="Child_price">
-                        Child
-                        <?php echo $child; ?>
-                        OMR
-                    </label>
-                </div>
-                <?php endif; ?>
-                <?php if ($private) : ?>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input Private" data-price="<?php echo $private; ?>" id="private_price"
-                        type="checkbox" name="Private" value="<?php echo $private; ?>">
-                    <label class="form-check-label" for="private_price">
-                        Private
-                        <?php echo $private; ?>
-                        OMR
-                    </label>
+                <div class="col-md-3">
+                    <div class="form-group age-group mt-3 mb-md-5">
+                        <label for="age">Child age 3-11</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button type="button" class="decreaseChild">-</button>
+                            </div>
+                            <input type="text" class="form-control" id="child" name="child_count" value="0" readonly>
+                            <div class="input-group-append">
+                                <button type="button" class="increaseChild">+</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <?php endif; ?>
             </div>
-        </div>
-
-        <div class="row mt-5">
-            <h4 class="age-title">No. of Guests
-                <?php echo $minimum_guest > 0 ? '( ' . $minimum_guest . ' guests minimum )': '' ?>
-            </h4>
-            <div class="col-md-3">
-                <div class="form-group age-group mt-3 mb-md-5">
-                    <label for="age">Adult age 12+</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <button type="button" class="decreaseAdult">-</button>
-                        </div>
-                        <input type="text" class="form-control" id="adult" name="adult_count" value="0" readonly>
-                        <div class="input-group-append">
-                            <button type="button" class="increaseAdult">+</button>
-                        </div>
+        <?php else : ?>
+            <div class="form-group age-group mt-3 mb-5">
+                <label for="age">Age</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button type="button" class="decreaseAge">-</button>
+                    </div>
+                    <input type="text" class="form-control" id="age" name="age" placeholder="Age" value="0" readonly>
+                    <div class="input-group-append">
+                        <button type="button" class="increaseAge">+</button>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="form-group age-group mt-3 mb-md-5">
-                    <label for="age">Child age 3-11</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <button type="button" class="decreaseChild">-</button>
-                        </div>
-                        <input type="text" class="form-control" id="child" name="child_count" value="0" readonly>
-                        <div class="input-group-append">
-                            <button type="button" class="increaseChild">+</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <?php if ($type) : ?>
-        <div class="form-group age-group mt-3 mb-5">
-            <label for="age">Age</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <button type="button" class="decreaseAge">-</button>
-                </div>
-                <input type="text" class="form-control" id="age" name="age" placeholder="Age" value="0" readonly>
-                <div class="input-group-append">
-                    <button type="button" class="increaseAge">+</button>
-                </div>
-            </div>
-        </div>
-
-        <hr />
-        <h3 class="document-title">Upload verification Documents</h3>
-        <div class="row">
-            <div class="col-4">
-                <div class="form-group mt-3">
-                    <label for="driver_license" class="form-label">Diver's License <span class="text-danger">*certified
-                            divers only</span></label>
-                    <div class="input-group">
-                        <div class="custom-file">
-                            <label class="custom-file-label" for="diver_license">Choose file</label>
-                            <input type="file" class="custom-file-input" id="diver_license" name="diver_license"
-                                accept=".pdf,.jpg,.jpeg,.png" required>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group mt-3">
-                    <label for="driver_license" class="form-label">Driver's Passport <span
-                            class="text-danger">*</span></label>
-                    <div class="input-group">
-                        <div class="custom-file">
-                            <label class="custom-file-label" for="driver_passport">Choose file</label>
-                            <input type="file" class="custom-file-input" id="driver_passport" name="driver_passport"
-                                accept=".pdf,.jpg,.jpeg,.png" required>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <?php endif; ?>
+        <!-- select guest -->
 
+        <!-- type leasson -->
+        <?php if ($type) : ?>
+            <hr />
+            <h3 class="document-title">Upload verification Documents</h3>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group mt-3">
+                        <label for="driver_license" class="form-label">Diver's License <span class="text-danger">*certified
+                                divers only</span></label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <label class="custom-file-label" for="diver_license">Choose file</label>
+                                <input type="file" class="custom-file-input" id="diver_license" name="diver_license"
+                                    accept=".pdf,.jpg,.jpeg,.png" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group mt-3">
+                        <label for="driver_license" class="form-label">Driver's Passport <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <label class="custom-file-label" for="driver_passport">Choose file</label>
+                                <input type="file" class="custom-file-input" id="driver_passport" name="driver_passport"
+                                    accept=".pdf,.jpg,.jpeg,.png" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+        <!-- type leasson -->
+
+        <!-- duration -->
+        <?php if ($variations) : ?>
+                <div class="row mt-5 duration-variation-group">
+                    <h4 class="age-title">Please Select</h4>
+                    <div class="persons d-flex flex-wrap gap-2 gap-md-5 flex-column flex-md-row">
+                        <?php foreach ($variations as $variation) : ?>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="variation_id" id="variation-<?php echo $variation['variation_id']; ?>" value="<?php echo $variation['variation_id']; ?>" checked>
+                                <label class="form-check-label" for="variation-<?php echo $variation['variation_id']; ?>">
+                                    <?php echo $variation['attributes']['attribute_duration']; ?>
+                                </label>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+        <!-- duration -->
+
+        <!-- add to cart button -->
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group mt-3">
@@ -184,6 +221,7 @@ function custom_shortcode_function()
                     </span>
                     OMR
                     <input type="hidden" name="product_id" id="product_id" value="<?php echo $productId; ?>">
+                    <input type="hidden" name="total_price" id="total_price" value="<?php echo $product->get_price(); ?>">
                 </div>
             </div>
             <div class="col-md-4">
@@ -193,36 +231,39 @@ function custom_shortcode_function()
                 </div>
             </div>
         </div>
+        <!-- add to cart button -->
 
+        <!-- add-ons -->
         <?php if($add_ons) : ?>
-        <div class="row mb-5 addons-group-container">
-            <h4 class="age-title">Customize your Camping trip and Select ADD-ONS</h4>
-            <div class="col-md-4">
-                <div class="form-group mt-3 addon-group">
-                    <?php foreach ($add_ons as $addon) : ?>
-                    <div class="form-check">
-                        <label class="form-check-label" for="addon-<?php echo $addon->ID; ?>">
-                            <h5 class="addon-title">
-                                <?php echo $addon->post_title; ?>
-                            </h5>
-                            <p>
-                                <?php echo $addon->post_content; ?>
-                            </p>
-                            <span class="price">
-                                <?php echo wc_get_product($addon->ID)->get_price(); ?>OMR
-                            </span>
-                        </label>
-                        <input class="form-check-input add-ons"
-                            data-price="<?php echo wc_get_product($addon->ID)->get_price(); ?>" type="checkbox"
-                            value="<?php echo $addon->ID; ?>" id="addon-<?php echo $addon->ID; ?>" name="addons[]">
+            <div class="row mb-5 addons-group-container">
+                <h4 class="age-title">Customize your Camping trip and Select ADD-ONS</h4>
+                <div class="col-md-4">
+                    <div class="form-group mt-3 addon-group">
+                        <?php foreach ($add_ons as $addon) : ?>
+                        <div class="form-check">
+                            <label class="form-check-label" for="addon-<?php echo $addon->ID; ?>">
+                                <h5 class="addon-title">
+                                    <?php echo $addon->post_title; ?>
+                                </h5>
+                                <p>
+                                    <?php echo $addon->post_content; ?>
+                                </p>
+                                <span class="price">
+                                    <?php echo wc_get_product($addon->ID)->get_price(); ?> OMR
+                                </span>
+                            </label>
+                            <input class="form-check-input add-ons"
+                                data-price="<?php echo wc_get_product($addon->ID)->get_price(); ?>" type="checkbox"
+                                value="<?php echo $addon->ID; ?>" id="addon-<?php echo $addon->ID; ?>" name="addons[]">
 
+                        </div>
+                        <?php endforeach; ?>
                     </div>
-                    <?php endforeach; ?>
                 </div>
             </div>
-        </div>
         <?php endif; ?>
         <hr />
+        <!-- add-ons -->
 
     </form>
 </div>
@@ -236,11 +277,13 @@ function custom_shortcode_function()
         function updatePrice() {
             const basePrice = parseFloat('<?php echo $product->get_price(); ?>');
             let totalPrice = basePrice;
+            let showPrice = basePrice;
 
             // Add prices for all checked Child checkboxes
             $('.Child:checked').each(function () {
                 const count = parseInt($('#child').val(), 10) || 0;
                 const price = parseFloat($(this).data('price')) || 0;
+                showPrice += count * price;
                 totalPrice += count * price;
             });
 
@@ -248,17 +291,26 @@ function custom_shortcode_function()
             $('.Adult:checked').each(function () {
                 const count = parseInt($('#adult').val(), 10) || 0;
                 const price = parseFloat($(this).data('price')) || 0;
+                showPrice += count * price;
                 totalPrice += count * price;
             });
 
             // Add prices for all checked Private checkboxes
             $('.Private:checked').each(function () {
                 const price = parseFloat($(this).data('price')) || 0;
+                showPrice += price;
                 totalPrice += price;
             });
 
+            // Add prices for all selected addons
+            $('.add-ons:checked').each(function () {
+                const price = parseFloat($(this).data('price')) || 0;
+                showPrice += price;
+            });
+            
             // Update the displayed price
-            $('#main_price').text(totalPrice.toFixed(2));
+            $('#main_price').text(showPrice.toFixed(2));
+            $('#total_price').val(totalPrice.toFixed(2));
         }
 
         // Handle changes to the Child checkbox
@@ -286,6 +338,11 @@ function custom_shortcode_function()
         });
 
         // Handle changes to the Private checkbox
+        $(document).on('change', '.add-ons', function () {
+            updatePrice();
+        });
+
+        // Handle changes to the addon checkbox
         $(document).on('change', '.Private', function () {
             updatePrice();
         });

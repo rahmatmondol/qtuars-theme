@@ -18,6 +18,7 @@ function qtours_enqueue_styles()
 add_action('wp_enqueue_scripts', 'qtours_enqueue_styles');
 
 
+include_once('inc/acf_fileds.php');
 include_once('ajax/single_product_form.php');
 include_once('ajax/add_to_wishlist.php');
 include_once('shortcode/single_product_form.php');
@@ -46,6 +47,8 @@ function display_comment_phone_meta($comment_text) {
     return $comment_text;
 }
 
+
+// calculate cart price
 function calculate_car_prices($cart)
 {
     if (is_admin() && !defined('DOING_AJAX')) {
@@ -54,13 +57,9 @@ function calculate_car_prices($cart)
 
     foreach ($cart->get_cart() as $cart_item) {
 
-        // get product id
-        $product_id = $cart_item['product_id'];
-
-        // get product type
-        $adult_count = get_field('adult_count', $product_id);
-
-        $cart_item['data']->set_price($adult_count);
+        if (isset($cart_item['variation']['total']) && $cart_item['variation']['total'] > 0) {
+            $cart_item['data']->set_price($cart_item['variation']['total']);
+        }
     }
 }
 
