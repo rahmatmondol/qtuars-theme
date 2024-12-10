@@ -26,11 +26,11 @@ function qtuars_add_cart_event()
     $variation_id   = sanitize_text_field($_POST['variation_id'] ?? '');
     $addons         = $_POST['addons'] ?? [];
 
-    $adult_count          = sanitize_text_field($_POST['adult_count'] ?? '');
-    $child_count          = sanitize_text_field($_POST['child_count'] ?? '');
+    $adult_count    = sanitize_text_field($_POST['adult_count'] ?? '');
+    $child_count    = sanitize_text_field($_POST['child_count'] ?? '');
     $child          = sanitize_text_field($_POST['Child'] ?? '');
     $adult          = sanitize_text_field($_POST['Adult'] ?? '');
-    $private          = sanitize_text_field($_POST['Private'] ?? '');
+    $private        = sanitize_text_field($_POST['Private'] ?? '');
     
     if (
         empty($name)
@@ -52,33 +52,25 @@ function qtuars_add_cart_event()
 
     //add cart car
     $args = [];
-    if ($name)           $args['name']           = $name;
-    if ($company_name)   $args['company_name']   = $company_name;
-    if ($phone_number)   $args['phone_number']   = $phone_number;
-    if ($email)          $args['email']          = $email;
-    if ($date)           $args['date']           = $date;
-    if ($time)           $args['time']           = $time;
-    if ($meeting_point)  $args['meeting_point']  = $meeting_point;
-    if ($age)            $args['age']            = $age;
-    if ($diver_license)  $args['diver_license']  = $diver_license;
-    if ($driver_passport)$args['driver_passport'] = $driver_passport;
+    if ($name)           $args['name']              = $name;
+    if ($company_name)   $args['company_name']      = $company_name;
+    if ($phone_number)   $args['phone_number']      = $phone_number;
+    if ($email)          $args['email']             = $email;
+    if ($date)           $args['date']              = $date;
+    if ($time)           $args['time']              = $time;
+    if ($meeting_point)  $args['meeting_point']     = $meeting_point;
+    if ($age)            $args['age']               = $age;
+    if ($diver_license)  $args['diver_license']     = $diver_license;
+    if ($driver_passport)$args['driver_passport']   = $driver_passport;
 
-    if ($adult_count)    $args['adult_count']    = $adult_count;
-    if ($child_count)    $args['child_count']    = $child_count;
-    if ($private)        $args['private']        = $private;
-
-    if($adult_count && $adult){
-        WC()->cart->add_to_cart($adult, $adult_count, 0, []);
-    }
-
-    if($child_count && $child){
-        WC()->cart->add_to_cart($child, $child_count, 0, []);
-    }
+    if ($adult_count)    $args['adult']             = $adult_count;
+    if ($child_count)    $args['child']             = $child_count;
+    if ($private)        $args['private']           = $private.'OMR';
 
     foreach ($addons as $addon_id) {
         WC()->cart->add_to_cart($addon_id, 1, 0, []);
     }
-    
+
 
     if ($variation_id) {
         WC()->cart->add_to_cart($product_id, 1, $variation_id, $args);

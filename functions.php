@@ -45,3 +45,23 @@ function display_comment_phone_meta($comment_text) {
     }
     return $comment_text;
 }
+
+function calculate_car_prices($cart)
+{
+    if (is_admin() && !defined('DOING_AJAX')) {
+        return;
+    }
+
+    foreach ($cart->get_cart() as $cart_item) {
+
+        // get product id
+        $product_id = $cart_item['product_id'];
+
+        // get product type
+        $adult_count = get_field('adult_count', $product_id);
+
+        $cart_item['data']->set_price($adult_count);
+    }
+}
+
+add_action('woocommerce_before_calculate_totals', 'calculate_car_prices');
