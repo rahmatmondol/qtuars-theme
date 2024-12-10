@@ -10,7 +10,8 @@ function custom_shortcode_function()
     $type = get_field('product_type', $productId);
     $minimum_guest = get_field('minimum_guest', $productId) ?? 0;
     $variations = $product->is_type('variable') ? $product->get_available_variations() : [];
-    $add_ons = get_field('product', $productId);
+    $add_ons = get_field('add-ons', $productId);
+    $persons = get_field('persons', $productId);
     ob_start();
     ?>
     <div class="checkout-form">
@@ -50,19 +51,57 @@ function custom_shortcode_function()
                 </select>
             </div>
 
-            <?php if ($variations) : ?>
-                <div class="row mt-5 duration-variation-group">
+            <?php if ($persons) : ?>
+                <div class="mt-5 duration-variation-group">
                     <h4 class="age-title">Please Select</h4>
-                    <?php foreach ($variations as $variation) : ?>
-                        <div class="col-3">
+                    <div class="persons d-flex flex-wrap gap-2 gap-md-5 flex-column flex-md-row">
+                    <?php foreach ($persons as $person) : ?>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="variation_id" id="variation-<?php echo $variation['variation_id']; ?>" value="<?php echo $variation['variation_id']; ?>" checked>
-                                <label class="form-check-label" for="variation-<?php echo $variation['variation_id']; ?>">
-                                    <?php echo $variation['attributes']['attribute_duration']; ?>
+                                <input class="form-check-input <?php echo $person->post_title; ?>" 
+                                data-price="<?php echo wc_get_product($person->ID)->get_price(); ?>" 
+                                type="checkbox" name="<?php echo $person->post_title; ?>" 
+                                id="person-<?php echo $person->ID; ?>"
+                                value="<?php echo $person->ID; ?>">
+                                <label class="form-check-label" for="person-<?php echo $person->ID; ?>">
+                                    <?php echo $person->post_title; ?>
+                                    <?php echo wc_get_product($person->ID)->get_price(); ?>
+                                    OMR
                                 </label>
                             </div>
+                            <?php endforeach; ?>
                         </div>
-                    <?php endforeach; ?>
+                </div>
+
+                <div class="row mt-5">
+                    <h4 class="age-title">No. of Guests <?php echo $minimum_guest > 0 ? '( ' . $minimum_guest . ' guests minimum )': '' ?></h4>
+                    <div class="col-md-3">
+                        <div class="form-group age-group mt-3 mb-md-5">
+                            <label for="age">Adult age 12+</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="decreaseAdult">-</button>
+                                </div>
+                                <input type="text" class="form-control" id="adult" name="adult_count" value="0" readonly>
+                                <div class="input-group-append">
+                                    <button type="button" class="increaseAdult">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group age-group mt-3 mb-md-5">
+                            <label for="age">Child age 3-11</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="decreaseChild">-</button>
+                                </div>
+                                <input type="text" class="form-control" id="child" name="child_count" value="0" readonly>
+                                <div class="input-group-append">
+                                    <button type="button" class="increaseChild">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             <?php endif; ?>
 
@@ -71,11 +110,11 @@ function custom_shortcode_function()
                     <label for="age">Age</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <button type="button" id="minus" onclick="decreaseAge()">-</button>
+                            <button type="button" class="decreaseAge">-</button>
                         </div>
                         <input type="text" class="form-control" id="age" name="age" placeholder="Age" value="0" readonly>
                         <div class="input-group-append">
-                            <button type="button" id="plus" onclick="increaseAge()">+</button>
+                            <button type="button" class="increaseAge">+</button>
                         </div>
                     </div>
                 </div>
@@ -106,47 +145,17 @@ function custom_shortcode_function()
                         </div>
                     </div>
                 </div>
-            <?php else: ?>
-                <div class="row mt-5">
-                <h4 class="age-title">No. of Guests <?php echo $minimum_guest > 0 ? '( ' . $minimum_guest . ' guests minimum )': '' ?></h4>
-                    <div class="col-md-3">
-                        <div class="form-group age-group mt-3 mb-md-5">
-                            <label for="age">Child age 3-11</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <button type="button" id="minus" onclick="decreaseChildAge()">-</button>
-                                </div>
-                                <input type="text" class="form-control" id="child" name="child" value="0" readonly>
-                                <div class="input-group-append">
-                                    <button type="button" id="plus" onclick="increaseChildAge()">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group age-group mt-3 mb-md-5">
-                            <label for="age">Adult age 12+</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <button type="button" id="minus" onclick="decreaseAdultAge()">-</button>
-                                </div>
-                                <input type="text" class="form-control" id="adult" name="adult" value="0" readonly>
-                                <div class="input-group-append">
-                                    <button type="button" id="plus" onclick="increaseAdultAge()">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               
             <?php endif; ?>
 
            <div class="row">
                 <div class="col-md-4">
                     <div class="form-group mt-3">
                         <button type="submit" class="add-to-cart">Add to Cart</button>
-                        <span class="price">
-                            <?php  echo wc_price($product->get_price()); ?>
+                        <span class="price" id="main_price">
+                            <?php echo $product->get_price(); ?>
                         </span>
+                        OMR
                         <input type="hidden" name="product_id" id="product_id" value="<?php echo $productId; ?>">
                     </div>
                 </div>
@@ -167,9 +176,9 @@ function custom_shortcode_function()
                                     <label class="form-check-label" for="addon-<?php echo $addon->ID; ?>">
                                         <h5 class="addon-title"><?php echo $addon->post_title; ?></h5>
                                         <p><?php echo $addon->post_content; ?></p>
-                                        <span class="price"><?php echo wc_price(wc_get_product($addon->ID)->get_price()); ?></span>
+                                        <span class="price"><?php echo wc_get_product($addon->ID)->get_price(); ?>OMR</span>
                                     </label>
-                                    <input class="form-check-input" type="checkbox" value="<?php echo $addon->ID; ?>" id="addon-<?php echo $addon->ID; ?>" name="addons[]">
+                                    <input class="form-check-input add-ons" data-price="<?php echo wc_get_product($addon->ID)->get_price(); ?>" type="checkbox" value="<?php echo $addon->ID; ?>" id="addon-<?php echo $addon->ID; ?>" name="addons[]">
                                     
                                 </div>
                             <?php endforeach; ?>
@@ -186,6 +195,143 @@ function custom_shortcode_function()
     <script>
         //jQuery ready start
         jQuery(document).ready(function ($) {
+
+            // Function to update the total price
+            function updatePrice() {
+                let basePrice = parseFloat($('#main_price').data('base-price')) || 0;
+
+                // Add prices for all checked checkboxes
+                $('.Child:checked, .Adult:checked, .Private:checked').each(function () {
+                    const inputId = $(this).hasClass('Child') ? '#child' : $(this).hasClass('Adult') ? '#adult' : '#private';
+                    const count = parseInt($(inputId).val()) || 0;
+                    basePrice += count * (parseFloat($(this).data('price')) || 0);
+                });
+
+                // Update the displayed price
+                $('#main_price').text(basePrice.toFixed(2));
+            }
+
+            // Handle changes to the Child checkbox
+            $(document).on('change', '.Child', function () {
+                const isChecked = $(this).is(':checked');
+                let childCount = parseInt($('#child').val()) || 0;
+
+                // Adjust child count based on checkbox state
+                $('#child').val(isChecked ? Math.max(1, childCount) : 0);
+
+                // Update the total price
+                updatePrice();
+            });
+
+            // Handle changes to the Adult checkbox
+            $(document).on('change', '.Adult', function () {
+                const isChecked = $(this).is(':checked');
+                let adultCount = parseInt($('#adult').val()) || 0;
+
+                // Adjust adult count based on checkbox state
+                $('#adult').val(isChecked ? Math.max(1, adultCount) : 0);
+
+                // Update the total price
+                updatePrice();
+            });
+
+            // Handle changes to the Private checkbox
+            $(document).on('change', '.Private', function () {
+                const isChecked = $(this).is(':checked');
+                const price = parseFloat($(this).data('price')) || 0;
+
+                if (isChecked) {
+                    $('#main_price').data('base-price', (parseFloat($('#main_price').data('base-price')) || 0) + price);
+                } else {
+                    $('#main_price').data('base-price', (parseFloat($('#main_price').data('base-price')) || 0) - price);
+                }
+
+                updatePrice();
+            });
+
+            // Handle increaseChild button click
+            $('.increaseChild').click(function () {
+                let childCount = parseInt($('#child').val()) || 0;
+
+                // Check the .Child checkbox if not already checked
+                if (!$('.Child').is(':checked')) {
+                    $('.Child').prop('checked', true);
+                    childCount = 1; // Reset count to 1 when checked
+                } else {
+                    childCount += 1; // Increment count if already checked
+                }
+
+                // Update child count and price
+                $('#child').val(childCount);
+                updatePrice();
+            });
+
+            // Handle decreaseChild button click
+            $('.decreaseChild').click(function () {
+                let childCount = parseInt($('#child').val()) || 0;
+
+                if (childCount > 1) {
+                    // Decrease the count if it's greater than 1
+                    childCount -= 1;
+                } else {
+                    // Uncheck the .Child checkbox if count reaches 0
+                    childCount = 0;
+                    $('.Child').prop('checked', false);
+                }
+
+                // Update child count and price
+                $('#child').val(childCount);
+                updatePrice();
+            });
+
+            // Handle increaseAdult button click
+            $('.increaseAdult').click(function () {
+                let adultCount = parseInt($('#adult').val()) || 0;
+
+                // Check the .Adult checkbox if not already checked
+                if (!$('.Adult').is(':checked')) {
+                    $('.Adult').prop('checked', true);
+                    adultCount = 1; // Reset count to 1 when checked
+                } else {
+                    adultCount += 1; // Increment count if already checked
+                }
+
+                // Update adult count and price
+                $('#adult').val(adultCount);
+                updatePrice();
+           });
+
+            // Handle decreaseAdult button click
+            $('.decreaseAdult').click(function () {
+                let adultCount = parseInt($('#adult').val()) || 0;
+
+                if (adultCount > 1) {
+                    // Decrease the count if it's greater than 1
+                    adultCount -= 1;
+                } else {
+                    // Uncheck the .Adult checkbox if count reaches 0
+                    adultCount = 0;
+                    $('.Adult').prop('checked', false);
+                }
+
+                // Update adult count and price
+                $('#adult').val(adultCount);
+                updatePrice();
+            });
+
+
+            $('.increaseAge').click(function () {
+                var age = $('#age').val();
+                $('#age').val(parseInt(age) + 1);
+            });
+
+            $('.decreaseAge').click(function () {
+                var age = $('#age').val();
+                if (age > 0) {
+                    $('#age').val(parseInt(age) - 1);
+                }
+            });
+
             //add to cart
             $("#checkout_form").on('submit', function (e) {
                 e.preventDefault();
@@ -234,40 +380,7 @@ function custom_shortcode_function()
             });
         });
 
-        function increaseAge() {
-            var age = document.getElementById('age').value;
-            document.getElementById('age').value = parseInt(age) + 1;
-        }
 
-        function decreaseAge() {
-            var age = document.getElementById('age').value;
-            if (age > 0) {
-                document.getElementById('age').value = parseInt(age) - 1;
-            }
-        }
-
-        function increaseChildAge() {
-            var age = document.getElementById('child').value;
-            document.getElementById('child').value = parseInt(age) + 1;
-        }
-        function decreaseChildAge() {
-            var age = document.getElementById('child').value;
-            if (age > 0) {
-                document.getElementById('child').value = parseInt(age) - 1;
-            }
-        }
-
-        function increaseAdultAge() {
-            var age = document.getElementById('adult').value;
-            document.getElementById('adult').value = parseInt(age) + 1;
-            
-        }
-        function decreaseAdultAge() {
-            var age = document.getElementById('adult').value;
-            if (age > 0) {
-                document.getElementById('adult').value = parseInt(age) - 1;
-            }
-        }
     </script>
 
     <style>
