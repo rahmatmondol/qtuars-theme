@@ -515,7 +515,7 @@ add_action( 'acf/include_fields', function() {
 				'label' => 'meeting points',
 				'name' => 'meeting_points',
 				'aria-label' => '',
-				'type' => 'select',
+				'type' => 'relationship',
 				'instructions' => '',
 				'required' => 0,
 				'conditional_logic' => 0,
@@ -524,30 +524,18 @@ add_action( 'acf/include_fields', function() {
 					'class' => '',
 					'id' => '',
 				),
-				'choices' => array(
-					'Qantab beach' => 'Qantab beach',
-					'Demaniyar Island' => 'Demaniyar Island',
-					'Qantab Fishing Village' => 'Qantab Fishing Village',
-					'Open Waters' => 'Open Waters',
-					'bandar rowdha' => 'bandar rowdha',
-					'FROM JUMAIRA BAY' => 'FROM JUMAIRA BAY',
-					'juneira muscat bay' => 'juneira muscat bay',
-					'Jumeirah Muscat bay beach' => 'Jumeirah Muscat bay beach',
+				'post_type' => array(
+					0 => 'location',
 				),
-				'default_value' => array(
-					0 => 'Qantab beach',
-					1 => 'Demaniyar Island',
-					2 => 'Qantab Fishing Village',
-					3 => 'Open Waters',
-					4 => 'FROM JUMAIRA BAY',
-					5 => 'Jumeirah Muscat bay beach',
+				'post_status' => array(
+					0 => 'publish',
 				),
-				'return_format' => 'value',
-				'multiple' => 1,
-				'allow_null' => 0,
-				'ui' => 1,
-				'ajax' => 1,
-				'placeholder' => '',
+				'taxonomy' => '',
+				'filters' => '',
+				'return_format' => 'object',
+				'min' => '',
+				'max' => '',
+				'elements' => '',
 			),
 		),
 		'location' => array(
@@ -673,4 +661,46 @@ add_action( 'acf/include_fields', function() {
 		'show_in_rest' => 0,
 	) );
 } );
+
+add_action( 'init', function() {
+	register_post_type( 'location', array(
+		'labels' => array(
+			'name' => 'Locations',
+			'singular_name' => 'Location',
+			'menu_name' => 'Locations',
+			'all_items' => 'All Locations',
+			'edit_item' => 'Edit Location',
+			'view_item' => 'View Location',
+			'view_items' => 'View Locations',
+			'add_new_item' => 'Add New Location',
+			'new_item' => 'New Location',
+			'parent_item_colon' => 'Parent Location:',
+			'search_items' => 'Search Locations',
+			'not_found' => 'No locations found',
+			'not_found_in_trash' => 'No locations found in Trash',
+			'archives' => 'Location Archives',
+			'attributes' => 'Location Attributes',
+			'insert_into_item' => 'Insert into location',
+			'uploaded_to_this_item' => 'Uploaded to this location',
+			'filter_items_list' => 'Filter locations list',
+			'filter_by_date' => 'Filter locations by date',
+			'items_list_navigation' => 'Locations list navigation',
+			'items_list' => 'Locations list',
+			'item_published' => 'Location published.',
+			'item_published_privately' => 'Location published privately.',
+			'item_reverted_to_draft' => 'Location reverted to draft.',
+			'item_scheduled' => 'Location scheduled.',
+			'item_updated' => 'Location updated.',
+			'item_link' => 'Location Link',
+			'item_link_description' => 'A link to a location.',
+		),
+		'public' => true,
+		'show_in_rest' => true,
+		'supports' => array(
+			0 => 'title',
+		),
+		'delete_with_user' => false,
+	) );
+} );
+
 

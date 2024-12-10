@@ -49,7 +49,7 @@ function custom_shortcode_function()
                 <?php
                         if ($meeting_points) {
                             foreach ($meeting_points as $meeting_point) {
-                                echo '<option value="' . $meeting_point . '">' . $meeting_point . '</option>'; 
+                                echo '<option value="' . $meeting_point->post_title . '">' . $meeting_point->post_title . '</option>'; 
                             }
                         }
                     ?>

@@ -1,6 +1,5 @@
 <?php
 
-
 function qtours_enqueue_styles()
 {
     $parent_style = 'Hello Elementor'; // Replace with the appropriate parent theme style handle
