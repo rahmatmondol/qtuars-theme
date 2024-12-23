@@ -8,6 +8,7 @@ function custom_shortcode_function()
     $product        = wc_get_product($productId);
     $meeting_points = get_field('meeting_points', $productId);
     $type           = get_field('product_type', $productId);
+    $maximum_guest  = get_field('maximum_guest', $productId) ?? 0;
     $minimum_guest  = get_field('minimum_guest', $productId) ?? 0;
     $variations     = $product->is_type('variable') ? $product->get_available_variations() : [];
     $add_ons        = get_field('add-ons', $productId);
@@ -15,6 +16,8 @@ function custom_shortcode_function()
     $adult          = get_field('adult', $productId);
     $private        = get_field('private', $productId);
     $guest          = get_field('guest', $productId);
+    $time           = get_field('time', $productId);
+    $is_private     = get_field('is_private', $productId);
     ob_start();
     ?>
 <div class="checkout-form">
@@ -40,7 +43,11 @@ function custom_shortcode_function()
         </div>
         <div class="form-group mt-3">
             <label for="time">Time</label>
-            <input type="time" class="form-control mt-2" id="time" name="time" placeholder="Time" required>
+            <?php if ($time) : ?>
+                <input type="text" class="form-control mt-2" id="time" name="time" placeholder="Time" required value="<?php echo $time; ?>" readonly>
+            <?php else: ?>
+                <input type="time" class="form-control mt-2" id="time" name="time" placeholder="Time" required>
+            <?php endif; ?>
         </div>
         <div class="form-group mt-3">
             <label for="time">Select meeting point</label>
@@ -57,9 +64,11 @@ function custom_shortcode_function()
         </div>
 
         <!-- select guest -->
-        <?php if ($guest) : ?>
+        <?php if ($guest && !$is_private) : ?>
             <div class="mt-5 duration-variation-group">
+                <?php if ($adult || $child || $private): ?>
                 <h4 class="age-title">Please Select</h4>
+                <?php endif; ?>
                 <div class="persons d-flex flex-wrap gap-2 gap-md-5 flex-column flex-md-row">
                     <?php if ($adult) : ?>
                     <!-- adult -->
@@ -107,6 +116,7 @@ function custom_shortcode_function()
             <div class="row mt-5">
                 <?php if ($adult) : ?>
                 <h4 class="age-title">No. of Guests
+                    <?php echo $maximum_guest > 0 ? '( ' . $maximum_guest . ' guests maximum )': '' ?>
                     <?php echo $minimum_guest > 0 ? '( ' . $minimum_guest . ' guests minimum )': '' ?>
                 </h4>
                 <div class="col-md-3">
@@ -141,6 +151,45 @@ function custom_shortcode_function()
                     </div>
                 </div>
                 <?php endif; ?>
+            </div>
+        <?php elseif($is_private) : ?>
+            <div class="row mt-5">
+                <h4 class="age-title">No. of Guests
+                    <?php echo $maximum_guest > 0 ? '( ' . $maximum_guest . ' guests maximum )': '' ?>
+                    <?php echo $minimum_guest > 0 ? '( ' . $minimum_guest . ' guests minimum )': '' ?>
+                </h4>
+                <?php if ($maximum_guest > 0) : ?>
+                    <input type="hidden" id="maximum_guest" name="maximum_guest" value="<?php echo $maximum_guest; ?>">
+                <?php endif; ?>
+                <div class="col-md-3">
+                    <div class="form-group age-group mt-3 mb-md-5">
+                        <label for="age">Adult age 12+</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button type="button" class="decreaseAdult">-</button>
+                            </div>
+                            <input type="text" class="form-control" id="adult" name="adult_count" value="0" readonly>
+                            <div class="input-group-append">
+                                <button type="button" class="increaseAdult">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group age-group mt-3 mb-md-5">
+                        <label for="age">Child age 3-11</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button type="button" class="decreaseChild">-</button>
+                            </div>
+                            <input type="text" class="form-control" id="child" name="child_count" value="0" readonly>
+                            <div class="input-group-append">
+                                <button type="button" class="increaseChild">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         <?php else : ?>
             <div class="form-group age-group mt-3 mb-5">
@@ -198,11 +247,16 @@ function custom_shortcode_function()
                 <div class="row mt-5 duration-variation-group">
                     <h4 class="age-title">Please Select</h4>
                     <div class="persons d-flex flex-wrap gap-2 gap-md-5 flex-column flex-md-row">
-                        <?php foreach ($variations as $variation) : ?>
+                        <?php foreach ($variations as $key => $variation) : ?>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="variation_id" id="variation-<?php echo $variation['variation_id']; ?>" value="<?php echo $variation['variation_id']; ?>" checked>
+                                <input class="form-check-input variations" type="radio" 
+                                data-price="<?php echo $variation['display_price']; ?>" 
+                                name="variation_id" id="variation-<?php echo $variation['variation_id']; ?>" 
+                                value="<?php echo $variation['variation_id']; ?>" 
+                                <?php echo $key == 0 ? 'checked' : ''; ?>
+                                >
                                 <label class="form-check-label" for="variation-<?php echo $variation['variation_id']; ?>">
-                                    <?php echo $variation['attributes']['attribute_duration']; ?>
+                                    <?php echo $variation['attributes']['attribute_duration'].' '. $variation['display_price'] .' OMR'; ?>
                                 </label>
                             </div>
                         <?php endforeach; ?>
@@ -217,11 +271,11 @@ function custom_shortcode_function()
                 <div class="form-group mt-3">
                     <button type="submit" class="add-to-cart">Add to Cart</button>
                     <span class="price" id="main_price">
-                        <?php echo $product->get_price(); ?>
+                        <?php echo $variations ? $variations[0]['display_price'] : $product->get_price(); ?>
                     </span>
                     OMR
                     <input type="hidden" name="product_id" id="product_id" value="<?php echo $productId; ?>">
-                    <input type="hidden" name="total_price" id="total_price" value="<?php echo $product->get_price(); ?>">
+                    <input type="hidden" name="total_price" id="total_price" value="<?php echo $variations ? $variations[0]['display_price'] : $product->get_price(); ?>">
                 </div>
             </div>
             <div class="col-md-4">
@@ -275,9 +329,15 @@ function custom_shortcode_function()
 
         // Function to update the total price
         function updatePrice() {
-            const basePrice = parseFloat('<?php echo $product->get_price(); ?>');
+            const basePrice = parseFloat('<?php echo $variations ? $variations[0]['display_price'] : $product->get_price(); ?>');
             let totalPrice = basePrice;
             let showPrice = basePrice;
+
+            // Add prices for all selected variations
+            $('.variations:checked').each(function () {
+                const price = parseFloat($(this).data('price')) || 0;
+                showPrice = price;
+            });
 
             // Add prices for all checked Child checkboxes
             $('.Child:checked').each(function () {
@@ -307,6 +367,7 @@ function custom_shortcode_function()
                 const price = parseFloat($(this).data('price')) || 0;
                 showPrice += price;
             });
+
             
             // Update the displayed price
             $('#main_price').text(showPrice.toFixed(2));
@@ -342,6 +403,12 @@ function custom_shortcode_function()
             updatePrice();
         });
 
+         // Handle changes to the variation
+        $(document).on('change', '.variations', function () {
+            updatePrice();
+        });
+
+
         // Handle changes to the addon checkbox
         $(document).on('change', '.Private', function () {
             updatePrice();
@@ -350,12 +417,17 @@ function custom_shortcode_function()
         // Handle increaseChild button click
         $('.increaseChild').click(function () {
             let childCount = parseInt($('#child').val()) || 0;
+            let totalGuest = parseInt($('#adult').val()) + parseInt($('#child').val());
+            let maxGuest = parseInt('<?php echo $maximum_guest; ?>');
 
+            if(totalGuest >= maxGuest){
+                return;
+            }
             // Check the .Child checkbox if not already checked
-            if (!$('.Child').is(':checked')) {
+            if ($('.Child').length && !$('.Child').is(':checked')) {
                 $('.Child').prop('checked', true);
                 childCount = 1; // Reset count to 1 when checked
-            } else {
+            } else{
                 childCount += 1; // Increment count if already checked
             }
 
@@ -385,9 +457,14 @@ function custom_shortcode_function()
         // Handle increaseAdult button click
         $('.increaseAdult').click(function () {
             let adultCount = parseInt($('#adult').val()) || 0;
+            let totalGuest = parseInt($('#adult').val()) + parseInt($('#child').val());
+            let maxGuest = parseInt('<?php echo $maximum_guest; ?>');
 
+            if(totalGuest >= maxGuest){
+                return;
+            }
             // Check the .Adult checkbox if not already checked
-            if (!$('.Adult').is(':checked')) {
+            if ($('.Adult').length && !$('.Adult').is(':checked')) {
                 $('.Adult').prop('checked', true);
                 adultCount = 1; // Reset count to 1 when checked
             } else {
@@ -433,6 +510,15 @@ function custom_shortcode_function()
         //add to cart
         $("#checkout_form").on('submit', function (e) {
             e.preventDefault();
+            let totalGuest = parseInt($('#adult').val()) + parseInt($('#child').val());
+            let maxGuest = parseInt('<?php echo $maximum_guest; ?>');
+            let minGuest = parseInt('<?php echo $minimum_guest; ?>');
+
+            if(totalGuest < minGuest){
+                alert('Minimum guest is ' + minGuest);
+                return;
+            }
+
             var formData = new FormData(this);
             formData.append('action', 'qtuars_add_to_cart');
 
@@ -459,7 +545,7 @@ function custom_shortcode_function()
         e.preventDefault();
 
         $.ajax({
-            url: '<?php echo admin_url('admin- ajax.php'); ?>',
+            url: '<?php echo admin_url('admin-ajax.php'); ?>',
             type: 'post',
             data: {
             action: 'qtuars_add_to_wishlist',

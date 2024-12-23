@@ -66,8 +66,8 @@ function qtuars_add_cart_event()
     if ($diver_license)  $args['diver_license']     = $diver_license;
     if ($driver_passport)$args['driver_passport']   = $driver_passport;
 
-    if ($adult)         $args['adult']             = $adult_count;
-    if ($child)         $args['child']             = $child_count;
+    if ($adult_count)   $args['adult']             = $adult_count;
+    if ($child_count)   $args['child']             = $child_count;
     if ($private)       $args['private']           = 'yes';
     if ($total_price)   $args['total']             = $total_price;
 

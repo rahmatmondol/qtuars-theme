@@ -129,7 +129,7 @@ if ( ! comments_open() ) {
 						</div>
 						<div class="col-md-8">
 							<div class="share-tripadvisor ">
-								<a href="https://www.tripadvisor.com/UserReview" target="_blank" class="share-button d-block d-md-inline-block"> 
+								<a href="https://www.tripadvisor.com/Attraction_Review-g1940497-d12356088-Reviews-QTours_om-Muscat_Muscat_Governorate.html" target="_blank" class="share-button d-block d-md-inline-block"> 
 									<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/share.png" alt="">
 								</a>
 								<span>Simply copy and paste your review and share it on tripadvisor</span>
